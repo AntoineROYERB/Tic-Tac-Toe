@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Switch from "@mui/material/Switch";
 
 function Square({ value, onSquareClick }) {
   return (
@@ -60,6 +61,7 @@ export default function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const [isToggle, setIsToggle] = useState(true);
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -73,7 +75,6 @@ export default function Game() {
 
   const moves = history.map((squares, move) => {
     let description;
-    console.log(move, currentMove);
 
     if (0 < move < currentMove) {
       description = "Go to move #" + move;
@@ -96,12 +97,17 @@ export default function Game() {
     );
   });
 
+  if (isToggle) {
+    moves.reverse();
+  }
+
   return (
     <div className="game">
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
+        <Switch defaultChecked onChange={() => setIsToggle(!isToggle)} />
         <ol>{moves}</ol>
       </div>
     </div>
