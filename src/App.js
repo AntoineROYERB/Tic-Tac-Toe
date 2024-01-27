@@ -87,23 +87,32 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
+  function findLastMove(previousList, currentList) {
+    for (let i = 0; i < currentList.length; i++) {
+      if (previousList[i] !== currentList[i]) {
+        return i;
+      }
+    }
+    // If no move is found, return the index of the last element
+    return currentList.length - 1;
+  }
   const moves = history.map((squares, move) => {
     let description;
-
-    if (0 < move < currentMove) {
-      description = "Go to move #" + move;
-    }
-    if (move == currentMove) {
+    if (move > 0 && move < currentMove) {
+      const lastMoveIndex = findLastMove(history[move - 1], history[move]);
+      if (lastMoveIndex !== -1) {
+        const row = Math.floor(lastMoveIndex / 3) + 1;
+        const col = (lastMoveIndex % 3) + 1;
+        description = `Go to move #${move} (${row}, ${col})`;
+      } else {
+        description = `Go to move #${move}`;
+      }
+    } else if (move === currentMove) {
       description = "You are at move #" + move;
-      return (
-        <li key={move}>
-          <div onClick={() => jumpTo(move)}>{description}</div>
-        </li>
-      );
-    }
-    if (0 == move) {
+    } else {
       description = "Go to game start";
     }
+
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
@@ -121,7 +130,7 @@ export default function Game() {
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <Switch defaultChecked onChange={() => setIsToggle(!isToggle)} />
+        <Switch onChange={() => setIsToggle(!isToggle)} />
         <ol>{moves}</ol>
       </div>
     </div>
