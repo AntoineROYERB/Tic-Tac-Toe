@@ -1,17 +1,31 @@
 import { useState } from "react";
 import Switch from "@mui/material/Switch";
 
-function Square({ value, onSquareClick }) {
+function Square({ value, onSquareClick, isWinnerSquare }) {
+  const squareClassName = isWinnerSquare ? "square winner" : "square";
+
   return (
-    <button className="square" onClick={onSquareClick}>
+    <button className={squareClassName} onClick={onSquareClick}>
       {value}
     </button>
   );
 }
 
 function Board({ xIsNext, squares, onPlay }) {
+  function renderSquare(i, isWinnerSquare) {
+    return (
+      <Square
+        key={i}
+        value={squares[i]}
+        onSquareClick={() => handleClick(i)}
+        isWinnerSquare={isWinnerSquare}
+      />
+    );
+  }
+
   function handleClick(i) {
-    if (calculateWinner(squares) || squares[i]) {
+    const win = calculateWinner(squares);
+    if ((win && win.winner) || squares[i]) {
       return;
     }
     const nextSquares = squares.slice();
@@ -23,10 +37,11 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
-  const winner = calculateWinner(squares);
+  const win = calculateWinner(squares);
   let status;
-  if (winner) {
-    status = "Winner: " + winner;
+  if (win && win.winner) {
+    const winningPosition = win.winningPosition;
+    status = "Winner: " + win.winner;
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
@@ -42,13 +57,9 @@ function Board({ xIsNext, squares, onPlay }) {
               .fill(null)
               .map((col, colIndex) => {
                 const squareIndex = rowIndex * 3 + colIndex;
-                return (
-                  <Square
-                    key={squareIndex}
-                    value={squares[squareIndex]}
-                    onSquareClick={() => handleClick(squareIndex)}
-                  />
-                );
+                const isWinnerSquare =
+                  win && win.winningPosition.includes(squareIndex);
+                return renderSquare(squareIndex, isWinnerSquare);
               })}
           </div>
         ))}
@@ -128,7 +139,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return { winner: squares[a], winningPosition: [a, b, c] };
     }
   }
   return null;
