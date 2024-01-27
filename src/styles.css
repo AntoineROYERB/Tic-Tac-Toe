@@ -1,70 +1,109 @@
 /* https://www.palettedecouleur.net/?source=codeur-com-blog&utm_source=codeur-com-blog */
 
-* {
-  box-sizing: border-box;
-}
-
 body {
   font-family: sans-serif;
-  margin: 20px;
+  margin: 0; /* Ajustez la marge selon vos besoins */
   padding: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* En-tête, contenu principal, pied de page */
+  min-height: 100vh;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-top: 0;
-}
-
-code {
-  font-size: 1.2em;
-}
-
-ul {
-  padding-inline-start: 20px;
-}
-
-li {
-  list-style-type: none;
-}
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
   text-align: center;
-  width: 34px;
 }
 
-.square.winner {
-  color: red;
+main {
+  display: grid;
+  grid-template-columns: 1fr auto; /* Morpion et historique à gauche, texte à droite */
+  gap: 20px;
+  padding: 20px;
 }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+#root {
+  /* Votre implémentation du morpion et de l'historique reste ici */
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 0;
+  }
+
+  code {
+    font-size: 1.2em;
+  }
+
+  ul {
+    padding-inline-start: 20px;
+  }
+
+  li {
+    list-style-type: none;
+  }
+
+  .square {
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    height: 34px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 34px;
+  }
+
+  .square.winner {
+    color: red;
+  }
+
+  .board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+
+  .status {
+    margin-bottom: 10px;
+  }
+
+  .game {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .game-info {
+    margin-left: 20px;
+  }
 }
 
-.status {
-  margin-bottom: 10px;
+#texte-droite {
+  /* Ajustez la largeur et le style selon vos besoins */
+  width: 200px;
 }
 
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
 }
