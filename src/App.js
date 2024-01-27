@@ -38,10 +38,13 @@ function Board({ xIsNext, squares, onPlay }) {
   }
 
   const win = calculateWinner(squares);
+  const isDraw = squares.every((element) => element !== null);
   let status;
   if (win && win.winner) {
-    const winningPosition = win.winningPosition;
     status = "Winner: " + win.winner;
+  }
+  if (isDraw) {
+    status = "Draw match";
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
