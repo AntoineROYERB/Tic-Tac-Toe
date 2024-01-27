@@ -1,7 +1,8 @@
 /* https://www.palettedecouleur.net/?source=codeur-com-blog&utm_source=codeur-com-blog */
 
 body {
-  font-family: sans-serif;
+  font-family: "Manrope", sans-serif;
+
   margin: 0; /* Ajustez la marge selon vos besoins */
   padding: 0;
   display: grid;
@@ -10,7 +11,7 @@ body {
 }
 
 header {
-  background-color: #333;
+  background-color: #dcded6;
   color: #fff;
   padding: 20px;
   text-align: center;
@@ -28,10 +29,11 @@ main {
 
   * {
     box-sizing: border-box;
+    background-color: #ced0c3;
   }
 
   body {
-    font-family: sans-serif;
+    font-family: "Manrope", sans-serif;
     margin: 20px;
     padding: 0;
   }
@@ -58,18 +60,18 @@ main {
   }
 
   .square {
-    background: #fff;
-    border: 1px solid #999;
+    background: #b4bab1;
+    border: 1px solid #859393;
     float: left;
-    font-size: 24px;
+    font-size: 96px; /* Double de la taille précédente */
     font-weight: bold;
-    line-height: 34px;
-    height: 34px;
+    line-height: 136px; /* Double de la taille précédente + la marge du haut */
+    height: 136px; /* Double de la taille précédente + la marge du haut */
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    width: 34px;
+    width: 136px; /* Double de la taille précédente + la marge de droite */
   }
 
   .square.winner {
@@ -89,6 +91,8 @@ main {
   .game {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .game-info {
@@ -102,7 +106,7 @@ main {
 }
 
 footer {
-  background-color: #333;
+  background-color: #5d726f;
   color: #fff;
   padding: 10px;
   text-align: center;
