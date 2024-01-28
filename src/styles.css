@@ -1,8 +1,28 @@
 /* https://www.palettedecouleur.net/?source=codeur-com-blog&utm_source=codeur-com-blog */
 
+li {
+  padding: 0;
+  display: flex; /* Utiliser Flexbox pour aligner le bouton au centre */
+  justify-content: center; /* Centrer horizontalement */
+  align-items: center; /* Centrer verticalement */
+}
+
+li:nth-child(odd) {
+  background: #b4bab1;
+}
+
+li button {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background-color: transparent; /* Pour que le fond de la li soit visible derrière */
+}
+
 body {
   font-family: "Manrope", sans-serif;
-
   margin: 0; /* Ajustez la marge selon vos besoins */
   padding: 0;
   display: grid;
@@ -12,7 +32,6 @@ body {
 
 header {
   background-color: #dcded6;
-  color: #fff;
   padding: 20px;
   text-align: center;
 }
@@ -26,15 +45,15 @@ main {
 
 #root {
   /* Votre implémentation du morpion et de l'historique reste ici */
+  background-color: #ced0c3;
 
   * {
     box-sizing: border-box;
-    background-color: #ced0c3;
   }
 
   body {
     font-family: "Manrope", sans-serif;
-    margin: 20px;
+    margin: 0;
     padding: 0;
   }
 
@@ -75,7 +94,7 @@ main {
   }
 
   .square.winner {
-    color: red;
+    color: green;
   }
 
   .board-row:after {
@@ -93,6 +112,8 @@ main {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin: 0;
+    padding: 0;
   }
 
   .game-info {
@@ -107,7 +128,6 @@ main {
 
 footer {
   background-color: #5d726f;
-  color: #fff;
   padding: 10px;
   text-align: center;
 }

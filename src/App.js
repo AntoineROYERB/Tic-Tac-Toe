@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Switch from "@mui/material/Switch";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 function Square({ value, onSquareClick, isWinnerSquare }) {
   const squareClassName = isWinnerSquare ? "square winner" : "square";
@@ -147,7 +148,10 @@ export default function Game() {
   return (
     <div className="game">
       <div className="game-info">
-        <Switch onChange={() => setIsToggle(!isToggle)} />
+        <Switch
+          // checkedIcon={KeyboardArrowDownIcon}
+          onChange={() => setIsToggle(!isToggle)}
+        />
         <ol>{moves}</ol>
       </div>
       <div className="game-board">
