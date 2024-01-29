@@ -2,7 +2,7 @@ import { useState } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-
+import { getParagraph } from "./paragraph";
 function Square({ value, onSquareClick, isWinnerSquare }) {
   const squareClassName = isWinnerSquare ? "square winner" : "square";
 
@@ -42,7 +42,6 @@ function Board({ xIsNext, squares, onPlay }) {
   const win = calculateWinner(squares);
   const isDraw = squares.every((element) => element !== null);
   let status;
-  console.log(isDraw);
   if (!!win) {
     status = "Winner: " + win.winner;
   } else if (isDraw) {
@@ -120,6 +119,18 @@ export default function Game() {
     // If no move is found, return the index of the last element
     return currentList.length - 1;
   }
+
+  // Resets only if a winner is present or the match is drawn
+  function handleRestart() {
+    const win = calculateWinner(currentSquares);
+    const isDraw = currentSquares.every((element) => element !== null);
+
+    if (win || isDraw) {
+      setHistory([Array(9).fill(null)]);
+      setCurrentMove(0);
+    }
+  }
+
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0 && move < currentMove) {
@@ -146,7 +157,7 @@ export default function Game() {
   if (!isToggle) {
     moves.reverse();
   }
-
+  const paragraph = getParagraph(history);
   return (
     <>
       <div className="game">
@@ -156,19 +167,14 @@ export default function Game() {
           </ToggleButton>
           <ol>{moves}</ol>
         </div>
-        <div className="game-board">
+        <div className="game-board" onClick={handleRestart}>
           <Board
             xIsNext={xIsNext}
             squares={currentSquares}
             onPlay={handlePlay}
           />
         </div>
-        <div className="texte-droite">
-          <p>
-            Ut enim quisque sibi plurimum confidit et ut quisque maxime virtute
-            et sapientia sic munitus est, ut nullo egeat suaque omnia in se ipso
-          </p>
-        </div>
+        <div className="texte-droite">{paragraph}</div>
       </div>
     </>
   );
