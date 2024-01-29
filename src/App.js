@@ -1,6 +1,7 @@
 import { useState } from "react";
-import Switch from "@mui/material/Switch";
+import ToggleButton from "@mui/material/ToggleButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 function Square({ value, onSquareClick, isWinnerSquare }) {
   const squareClassName = isWinnerSquare ? "square winner" : "square";
@@ -41,32 +42,34 @@ function Board({ xIsNext, squares, onPlay }) {
   const win = calculateWinner(squares);
   const isDraw = squares.every((element) => element !== null);
   let status;
-  if (win && win.winner) {
+  console.log(isDraw);
+  if (!!win) {
     status = "Winner: " + win.winner;
-  }
-  if (isDraw) {
+  } else if (isDraw) {
     status = "Draw match";
-  } else {
+  } else if (!win) {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
   return (
     <>
       <div className="status">{status}</div>
-      {Array(3)
-        .fill(null)
-        .map((row, rowIndex) => (
-          <div key={rowIndex} className="board-row">
-            {Array(3)
-              .fill(null)
-              .map((col, colIndex) => {
-                const squareIndex = rowIndex * 3 + colIndex;
-                const isWinnerSquare =
-                  win && win.winningPosition.includes(squareIndex);
-                return renderSquare(squareIndex, isWinnerSquare);
-              })}
-          </div>
-        ))}
+      <div className="board">
+        {Array(3)
+          .fill(null)
+          .map((row, rowIndex) => (
+            <div key={rowIndex} className="board-row">
+              {Array(3)
+                .fill(null)
+                .map((col, colIndex) => {
+                  const squareIndex = rowIndex * 3 + colIndex;
+                  const isWinnerSquare =
+                    win && win.winningPosition.includes(squareIndex);
+                  return renderSquare(squareIndex, isWinnerSquare);
+                })}
+            </div>
+          ))}
+      </div>
     </>
   );
 }
@@ -140,36 +143,33 @@ export default function Game() {
       </li>
     );
   });
-
-  if (isToggle) {
+  if (!isToggle) {
     moves.reverse();
   }
 
   return (
-    <div className="game">
-      <div className="game-info">
-        <Switch
-          // checkedIcon={KeyboardArrowDownIcon}
-          onChange={() => setIsToggle(!isToggle)}
-        />
-        <ol>{moves}</ol>
+    <>
+      <div className="game">
+        <div className="game-info">
+          <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
+            {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
+          </ToggleButton>
+          <ol>{moves}</ol>
+        </div>
+        <div className="game-board">
+          <Board
+            xIsNext={xIsNext}
+            squares={currentSquares}
+            onPlay={handlePlay}
+          />
+        </div>
+        <div className="texte-droite">
+          <p>
+            Ut enim quisque sibi plurimum confidit et ut quisque maxime virtute
+            et sapientia sic munitus est, ut nullo egeat suaque omnia in se ipso
+          </p>
+        </div>
       </div>
-      <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      </div>
-      <div id="texte-droite">
-        <p>
-          Ut enim quisque sibi plurimum confidit et ut quisque maxime virtute et
-          sapientia sic munitus est, ut nullo egeat suaque omnia in se ipso
-          posita iudicet, ita in amicitiis expetendis colendisque maxime
-          excellit. Quid enim? Africanus indigens mei? Minime hercule! ac ne ego
-          quidem illius; sed ego admiratione quadam virtutis eius, ille vicissim
-          opinione fortasse non nulla, quam de meis moribus habebat, me dilexit;
-          auxit benevolentiam consuetudo. Sed quamquam utilitates multae et
-          magnae consecutae sunt, non sunt tamen ab earum spe causae diligendi
-          profectae.
-        </p>
-      </div>
-    </div>
+    </>
   );
 }
