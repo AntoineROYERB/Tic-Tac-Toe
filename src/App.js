@@ -99,7 +99,6 @@ export default function Game() {
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
   const [isToggle, setIsToggle] = useState(true);
-  let drawMessageSent = false;
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -132,6 +131,27 @@ export default function Game() {
     }
   }
 
+  let paragraph;
+  let finalMessageSent;
+  if (!finalMessageSent) {
+    paragraph = getParagraph(history);
+    if (paragraph.props.children.toString() == "It's a draw") {
+      finalMessageSent = "draw";
+    }
+    if (paragraph.props.children.toString() == "It's almost won") {
+      finalMessageSent = "It's almost won";
+    }
+  } else if (finalMessageSent == "draw") {
+    paragraph = <p>It's a draw</p>;
+  } else if (finalMessageSent == "It's almost won") {
+    paragraph = <p>It's almost won</p>;
+  }
+
+  const win = calculateWinner(currentSquares);
+  if (win) {
+    paragraph = <p>Well played !</p>;
+  }
+
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0 && move < currentMove) {
@@ -151,32 +171,14 @@ export default function Game() {
 
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        <button onClick={() => jumpTo(move, paragraph)}>{description}</button>
       </li>
     );
   });
+
   if (!isToggle) {
     moves.reverse();
   }
-
-  function isSameParagraph(paragraph1, paragraph2) {
-    return (
-      paragraph1 &&
-      paragraph2 &&
-      paragraph1.props.children === paragraph2.props.children
-    );
-  }
-
-  let paragraph;
-  if (!drawMessageSent) {
-    paragraph = getParagraph(history);
-    if (paragraph.props.children.toString() == "It's a draw") {
-      drawMessageSent = !drawMessageSent;
-    }
-  } else {
-    paragraph = <p>It's a draw</p>;
-  }
-
   return (
     <>
       <div className="game">

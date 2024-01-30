@@ -103,6 +103,8 @@ export const getParagraph = (history) => {
         );
       }
 
+    case 6:
+      return <p>It's almost won</p>;
     default:
       return <p>It's a draw</p>;
   }
