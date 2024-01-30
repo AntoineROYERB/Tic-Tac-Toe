@@ -99,6 +99,7 @@ export default function Game() {
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
   const [isToggle, setIsToggle] = useState(true);
+  let drawMessageSent = false;
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -157,7 +158,25 @@ export default function Game() {
   if (!isToggle) {
     moves.reverse();
   }
-  const paragraph = getParagraph(history);
+
+  function isSameParagraph(paragraph1, paragraph2) {
+    return (
+      paragraph1 &&
+      paragraph2 &&
+      paragraph1.props.children === paragraph2.props.children
+    );
+  }
+
+  let paragraph;
+  if (!drawMessageSent) {
+    paragraph = getParagraph(history);
+    if (paragraph.props.children.toString() == "It's a draw") {
+      drawMessageSent = !drawMessageSent;
+    }
+  } else {
+    paragraph = <p>It's a draw</p>;
+  }
+
   return (
     <>
       <div className="game">
