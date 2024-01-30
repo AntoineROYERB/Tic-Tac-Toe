@@ -43,15 +43,29 @@ button {
 }
 
 header {
+  display: flex;
   background-color: #dcded6;
-  text-align: center;
   height: 3em;
+  align-items: center;
+  justify-content: center;
+}
+
+header h1 {
+  font-size: 1.5em;
 }
 
 footer {
+  display: flex;
   height: 3em;
   background-color: #5d726f;
-  text-align: center;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.github-link img,
+.linkedin-link img {
+  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(135deg) brightness(0%)
+    contrast(100%);
 }
 
 #root {
@@ -91,7 +105,6 @@ footer {
   .board {
     width: fit-content;
     height: fit-content;
-    border: blue solid;
   }
 
   .game-board {
@@ -113,7 +126,6 @@ footer {
     flex-direction: column;
     margin: 1em;
     padding: 1em;
-    border: red solid 2px;
     width: 30%;
     flex-grow: 1; /* Permet à .game-info de prendre autant d'espace que possible */
     flex-shrink: 1; /* Permet à .game-info de réduire sa taille si nécessaire */
@@ -129,7 +141,6 @@ footer {
   .texte-droite {
     width: 20em;
     margin: 1em;
-    border: green solid;
     flex-grow: 1; /* Permet à .texte-droite de prendre autant d'espace que possible */
     flex-shrink: 1; /* Permet à .texte-droite de réduire sa taille si nécessaire */
     max-width: 30%; /* Définissez une largeur maximale pour éviter qu'elle ne devienne trop grande */
