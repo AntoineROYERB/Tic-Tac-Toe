@@ -3,9 +3,8 @@ import ToggleButton from "@mui/material/ToggleButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getParagraph } from "./paragraph";
-import { Hub } from "@mui/icons-material";
 
-function Board({ xIsNext, squares, onPlay, win }) {
+function Board({ xIsNext, squares, onPlay, gameInfo }) {
   function renderSquare(squareIndex, isWinnerSquare) {
     return (
       <Square
@@ -18,7 +17,7 @@ function Board({ xIsNext, squares, onPlay, win }) {
   }
 
   function handleClick(squareIndex) {
-    if ((win && win.winner) || squares[squareIndex]) {
+    if ((gameInfo && gameInfo.winner) || squares[squareIndex]) {
       return;
     }
 
@@ -44,7 +43,8 @@ function Board({ xIsNext, squares, onPlay, win }) {
                 .map((col, colIndex) => {
                   const squareIndex = rowIndex * 3 + colIndex;
                   const isWinnerSquare =
-                    win && win.winningPosition.includes(squareIndex);
+                    !!gameInfo &&
+                    gameInfo.winningPosition.includes(squareIndex);
                   return renderSquare(squareIndex, isWinnerSquare);
                 })}
             </div>
@@ -111,6 +111,30 @@ function History({ onJumpTo, gameHistory, currentMove }) {
   );
 }
 
+function Paragraph({ gameHistory, gameInfo }) {
+  let paragraph;
+  let finalMessageSent;
+  if (!finalMessageSent) {
+    paragraph = getParagraph(gameHistory);
+    if (paragraph.props.children.toString() == "It's a draw") {
+      finalMessageSent = "draw";
+    }
+    if (paragraph.props.children.toString() == "It's almost won") {
+      finalMessageSent = "It's almost won";
+    }
+  } else if (finalMessageSent == "draw") {
+    paragraph = <p>It's a draw</p>;
+  } else if (finalMessageSent == "It's almost won") {
+    paragraph = <p>It's almost won</p>;
+  }
+
+  if (gameInfo) {
+    paragraph = <p>Well played !</p>;
+  }
+
+  return <>{paragraph}</>;
+}
+
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
@@ -130,40 +154,23 @@ export default function Game() {
 
   // Resets only if a winner is present or the match is drawn
   function handleRestart() {
-    if (win || isDraw) {
+    console.log(gameInfo);
+    if (gameInfo) {
       setHistory([Array(9).fill(null)]);
       setCurrentMove(0);
     }
   }
 
-  let paragraph;
-  let finalMessageSent;
-  if (!finalMessageSent) {
-    paragraph = getParagraph(history);
-    if (paragraph.props.children.toString() == "It's a draw") {
-      finalMessageSent = "draw";
-    }
-    if (paragraph.props.children.toString() == "It's almost won") {
-      finalMessageSent = "It's almost won";
-    }
-  } else if (finalMessageSent == "draw") {
-    paragraph = <p>It's a draw</p>;
-  } else if (finalMessageSent == "It's almost won") {
-    paragraph = <p>It's almost won</p>;
-  }
+  const gameInfo = getGameInfo(currentBoard);
 
-  const win = calculateWinner(currentBoard);
-  if (win) {
-    paragraph = <p>Well played !</p>;
-  }
-
-  const isDraw = currentBoard.every((element) => element !== null);
   let status;
-  if (!!win) {
-    status = "Winner: " + win.winner;
-  } else if (isDraw) {
-    status = "Draw match";
-  } else if (!win) {
+  console.log("gameInfo", gameInfo, !!gameInfo);
+  if (!!gameInfo) {
+    if (gameInfo.winner) status = "Winner: " + gameInfo.winner;
+    else if (gameInfo.isDraw) {
+      status = "Draw match";
+    }
+  } else if (!gameInfo) {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
   return (
@@ -181,11 +188,12 @@ export default function Game() {
             xIsNext={xIsNext}
             squares={currentBoard}
             onPlay={handlePlay}
-            win={win}
+            gameInfo={gameInfo}
           />
         </div>
-
-        <div className="game-text">{paragraph}</div>
+        <div className="game-text">
+          <Paragraph gameHistory={history} gameInfo={gameInfo} />
+        </div>
       </div>
     </>
   );
@@ -201,7 +209,7 @@ function Square({ value, onSquareClick, isWinnerSquare }) {
   );
 }
 
-function calculateWinner(squares) {
+function getGameInfo(squares) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -215,8 +223,10 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return { winner: squares[a], winningPosition: [a, b, c] };
+      return { winner: squares[a], winningPosition: [a, b, c], isDraw: false };
     }
   }
-  return null;
+  const isDraw = squares.every((element) => element !== null);
+  if (isDraw) return { winner: null, winningPosition: null, isDraw: true };
+  else return null;
 }
