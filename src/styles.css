@@ -138,11 +138,11 @@ footer {
     width: 100%;
     height: 100%;
   } */
-  .texte-droite {
+  .game-text {
     width: 20em;
     margin: 1em;
-    flex-grow: 1; /* Permet à .texte-droite de prendre autant d'espace que possible */
-    flex-shrink: 1; /* Permet à .texte-droite de réduire sa taille si nécessaire */
-    max-width: 30%; /* Définissez une largeur maximale pour éviter qu'elle ne devienne trop grande */
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 30%;
   }
 }

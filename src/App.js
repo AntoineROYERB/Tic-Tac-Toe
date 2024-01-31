@@ -188,6 +188,7 @@ export default function Game() {
           </ToggleButton>
           <ol>{moves}</ol>
         </div>
+
         <div className="game-board" onClick={handleRestart}>
           <Board
             xIsNext={xIsNext}
@@ -195,7 +196,8 @@ export default function Game() {
             onPlay={handlePlay}
           />
         </div>
-        <div className="texte-droite">{paragraph}</div>
+
+        <div className="game-text">{paragraph}</div>
       </div>
     </>
   );

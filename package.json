@@ -15,7 +15,8 @@
     "@mui/material": "^5.15.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "@babel/plugin-proposal-private-property-in-object": "^1.0.0"
   },
   "browserslist": {
     "production": [
