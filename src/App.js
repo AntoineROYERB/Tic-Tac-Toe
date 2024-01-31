@@ -3,6 +3,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getParagraph } from "./paragraph";
+import { Hub } from "@mui/icons-material";
 
 function Board({ xIsNext, squares, onPlay, win }) {
   function renderSquare(squareIndex, isWinnerSquare) {
@@ -53,56 +54,8 @@ function Board({ xIsNext, squares, onPlay, win }) {
   );
 }
 
-function History() {
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0 && move < currentMove) {
-      const lastMoveIndex = findLastMove(history[move - 1], history[move]);
-      if (lastMoveIndex !== -1) {
-        const row = Math.floor(lastMoveIndex / 3) + 1;
-        const col = (lastMoveIndex % 3) + 1;
-        description = `Go to move #${move} (${row}, ${col})`;
-      } else {
-        description = `Go to move #${move}`;
-      }
-    } else if (move === currentMove) {
-      description = "You are at move #" + move;
-    } else {
-      description = "Go to game start";
-    }
-
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
-    );
-  });
-  return (
-    <>
-      <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
-        {/* {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />} */}
-      </ToggleButton>
-      <ol>{moves}</ol>
-    </>
-  );
-}
-
-export default function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [currentMove, setCurrentMove] = useState(0);
-  const xIsNext = currentMove % 2 === 0;
-  const currentBoard = history[currentMove];
+function History({ onJumpTo, gameHistory, currentMove }) {
   const [isToggle, setIsToggle] = useState(true);
-
-  function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
-    setCurrentMove(nextHistory.length - 1);
-  }
-
-  function jumpTo(nextMove) {
-    setCurrentMove(nextMove);
-  }
 
   function findLastMove(previousList, currentList) {
     for (let i = 0; i < currentList.length; i++) {
@@ -114,11 +67,69 @@ export default function Game() {
     return currentList.length - 1;
   }
 
+  function handleClick(moveIndex) {
+    onJumpTo(moveIndex);
+  }
+
+  const movesDescription = gameHistory.map((_, moveIndex) => {
+    let description;
+    if (moveIndex > 0 && moveIndex < currentMove) {
+      const lastMoveIndex = findLastMove(
+        gameHistory[moveIndex - 1],
+        gameHistory[moveIndex]
+      );
+      if (lastMoveIndex !== -1) {
+        const row = Math.floor(lastMoveIndex / 3) + 1;
+        const col = (lastMoveIndex % 3) + 1;
+        description = `Go to move #${moveIndex} (${row}, ${col})`;
+      } else {
+        description = `Go to move #${moveIndex}`;
+      }
+    } else if (moveIndex === currentMove) {
+      description = "You are at move #" + moveIndex;
+    } else {
+      description = "Go to game start";
+    }
+
+    return (
+      <li key={moveIndex}>
+        <button onClick={() => handleClick(moveIndex)}>{description}</button>
+      </li>
+    );
+  });
+
+  if (!isToggle) {
+    movesDescription.reverse();
+  }
+  return (
+    <>
+      <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
+        {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
+      </ToggleButton>
+      <ol>{movesDescription}</ol>
+    </>
+  );
+}
+
+export default function Game() {
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+
+  const xIsNext = currentMove % 2 === 0;
+  const currentBoard = history[currentMove];
+
+  function handlePlay(nextSquares) {
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+  }
+
+  function handleJumpTo(nextMove) {
+    setCurrentMove(nextMove);
+  }
+
   // Resets only if a winner is present or the match is drawn
   function handleRestart() {
-    const win = calculateWinner(currentBoard);
-    const isDraw = currentBoard.every((element) => element !== null);
-
     if (win || isDraw) {
       setHistory([Array(9).fill(null)]);
       setCurrentMove(0);
@@ -146,34 +157,6 @@ export default function Game() {
     paragraph = <p>Well played !</p>;
   }
 
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0 && move < currentMove) {
-      const lastMoveIndex = findLastMove(history[move - 1], history[move]);
-      if (lastMoveIndex !== -1) {
-        const row = Math.floor(lastMoveIndex / 3) + 1;
-        const col = (lastMoveIndex % 3) + 1;
-        description = `Go to move #${move} (${row}, ${col})`;
-      } else {
-        description = `Go to move #${move}`;
-      }
-    } else if (move === currentMove) {
-      description = "You are at move #" + move;
-    } else {
-      description = "Go to game start";
-    }
-
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
-    );
-  });
-
-  if (!isToggle) {
-    moves.reverse();
-  }
-
   const isDraw = currentBoard.every((element) => element !== null);
   let status;
   if (!!win) {
@@ -186,16 +169,12 @@ export default function Game() {
   return (
     <>
       <div className="game">
-        <div className="game-history">
-          <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
-            {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
-          </ToggleButton>
-          <ol>{moves}</ol>
-        </div>
-        {/* 
-        <div className="game-history">
-          <History />
-        </div> */}
+        <History
+          onJumpTo={handleJumpTo}
+          gameHistory={history}
+          currentMove={currentMove}
+          squares={currentBoard}
+        />
         <div className="game-board" onClick={handleRestart}>
           <div className="status">{status}</div>
           <Board
