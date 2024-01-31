@@ -17,6 +17,7 @@ function Board({ xIsNext, squares, onPlay, gameInfo }) {
   }
 
   function handleClick(squareIndex) {
+    console.log("squares", squares);
     if ((gameInfo && gameInfo.winner) || squares[squareIndex]) {
       return;
     }
@@ -30,7 +31,7 @@ function Board({ xIsNext, squares, onPlay, gameInfo }) {
     }
     onPlay(nextSquares);
   }
-
+  console.log("gameInfo:", gameInfo);
   return (
     <>
       <div className="board">
@@ -42,9 +43,12 @@ function Board({ xIsNext, squares, onPlay, gameInfo }) {
                 .fill(null)
                 .map((col, colIndex) => {
                   const squareIndex = rowIndex * 3 + colIndex;
+
                   const isWinnerSquare =
-                    !!gameInfo &&
+                    gameInfo &&
+                    gameInfo.winningPosition &&
                     gameInfo.winningPosition.includes(squareIndex);
+
                   return renderSquare(squareIndex, isWinnerSquare);
                 })}
             </div>
@@ -154,7 +158,6 @@ export default function Game() {
 
   // Resets only if a winner is present or the match is drawn
   function handleRestart() {
-    console.log(gameInfo);
     if (gameInfo) {
       setHistory([Array(9).fill(null)]);
       setCurrentMove(0);
@@ -164,7 +167,6 @@ export default function Game() {
   const gameInfo = getGameInfo(currentBoard);
 
   let status;
-  console.log("gameInfo", gameInfo, !!gameInfo);
   if (!!gameInfo) {
     if (gameInfo.winner) status = "Winner: " + gameInfo.winner;
     else if (gameInfo.isDraw) {
@@ -182,7 +184,7 @@ export default function Game() {
           currentMove={currentMove}
           squares={currentBoard}
         />
-        <div className="game-board" onClick={handleRestart}>
+        <div className="game-status-board" onClick={handleRestart}>
           <div className="status">{status}</div>
           <Board
             xIsNext={xIsNext}
@@ -191,9 +193,7 @@ export default function Game() {
             gameInfo={gameInfo}
           />
         </div>
-        <div className="game-text">
-          <Paragraph gameHistory={history} gameInfo={gameInfo} />
-        </div>
+        <Paragraph gameHistory={history} gameInfo={gameInfo} />
       </div>
     </>
   );
