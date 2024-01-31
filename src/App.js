@@ -5,45 +5,34 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getParagraph } from "./paragraph";
 
 function Board({ xIsNext, squares, onPlay, win }) {
-  function renderSquare(i, isWinnerSquare) {
+  function renderSquare(squareIndex, isWinnerSquare) {
     return (
       <Square
-        key={i}
-        value={squares[i]}
-        onSquareClick={() => handleClick(i)}
+        key={squareIndex}
+        value={squares[squareIndex]}
+        onSquareClick={() => handleClick(squareIndex)}
         isWinnerSquare={isWinnerSquare}
       />
     );
   }
 
-  function handleClick(i) {
-    const win = calculateWinner(squares);
-    if ((win && win.winner) || squares[i]) {
+  function handleClick(squareIndex) {
+    if ((win && win.winner) || squares[squareIndex]) {
       return;
     }
+
     const nextSquares = squares.slice();
+
     if (xIsNext) {
-      nextSquares[i] = "X";
+      nextSquares[squareIndex] = "X";
     } else {
-      nextSquares[i] = "O";
+      nextSquares[squareIndex] = "O";
     }
     onPlay(nextSquares);
   }
 
-  // const win = calculateWinner(squares);
-  // const isDraw = squares.every((element) => element !== null);
-  // let status;
-  // if (!!win) {
-  //   status = "Winner: " + win.winner;
-  // } else if (isDraw) {
-  //   status = "Draw match";
-  // } else if (!win) {
-  //   status = "Next player: " + (xIsNext ? "X" : "O");
-  // }
-
   return (
     <>
-      {/* <div className="status">{status}</div> */}
       <div className="board">
         {Array(3)
           .fill(null)
@@ -185,7 +174,6 @@ export default function Game() {
     moves.reverse();
   }
 
-  // const win = calculateWinner(squares);
   const isDraw = currentBoard.every((element) => element !== null);
   let status;
   if (!!win) {
