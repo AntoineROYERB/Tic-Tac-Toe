@@ -64,11 +64,45 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
+function History() {
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0 && move < currentMove) {
+      const lastMoveIndex = findLastMove(history[move - 1], history[move]);
+      if (lastMoveIndex !== -1) {
+        const row = Math.floor(lastMoveIndex / 3) + 1;
+        const col = (lastMoveIndex % 3) + 1;
+        description = `Go to move #${move} (${row}, ${col})`;
+      } else {
+        description = `Go to move #${move}`;
+      }
+    } else if (move === currentMove) {
+      description = "You are at move #" + move;
+    } else {
+      description = "Go to game start";
+    }
+
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+  return (
+    <>
+      <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
+        {/* {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />} */}
+      </ToggleButton>
+      <ol>{moves}</ol>
+    </>
+  );
+}
+
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
-  const currentSquares = history[currentMove];
+  const currentBoard = history[currentMove];
   const [isToggle, setIsToggle] = useState(true);
 
   function handlePlay(nextSquares) {
@@ -93,8 +127,8 @@ export default function Game() {
 
   // Resets only if a winner is present or the match is drawn
   function handleRestart() {
-    const win = calculateWinner(currentSquares);
-    const isDraw = currentSquares.every((element) => element !== null);
+    const win = calculateWinner(currentBoard);
+    const isDraw = currentBoard.every((element) => element !== null);
 
     if (win || isDraw) {
       setHistory([Array(9).fill(null)]);
@@ -118,34 +152,34 @@ export default function Game() {
     paragraph = <p>It's almost won</p>;
   }
 
-  const win = calculateWinner(currentSquares);
+  const win = calculateWinner(currentBoard);
   if (win) {
     paragraph = <p>Well played !</p>;
   }
 
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0 && move < currentMove) {
-      const lastMoveIndex = findLastMove(history[move - 1], history[move]);
-      if (lastMoveIndex !== -1) {
-        const row = Math.floor(lastMoveIndex / 3) + 1;
-        const col = (lastMoveIndex % 3) + 1;
-        description = `Go to move #${move} (${row}, ${col})`;
-      } else {
-        description = `Go to move #${move}`;
-      }
-    } else if (move === currentMove) {
-      description = "You are at move #" + move;
-    } else {
-      description = "Go to game start";
-    }
+  // const moves = history.map((squares, move) => {
+  //   let description;
+  //   if (move > 0 && move < currentMove) {
+  //     const lastMoveIndex = findLastMove(history[move - 1], history[move]);
+  //     if (lastMoveIndex !== -1) {
+  //       const row = Math.floor(lastMoveIndex / 3) + 1;
+  //       const col = (lastMoveIndex % 3) + 1;
+  //       description = `Go to move #${move} (${row}, ${col})`;
+  //     } else {
+  //       description = `Go to move #${move}`;
+  //     }
+  //   } else if (move === currentMove) {
+  //     description = "You are at move #" + move;
+  //   } else {
+  //     description = "Go to game start";
+  //   }
 
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
-    );
-  });
+  //   return (
+  //     <li key={move}>
+  //       <button onClick={() => jumpTo(move)}>{description}</button>
+  //     </li>
+  //   );
+  // });
 
   if (!isToggle) {
     moves.reverse();
@@ -153,19 +187,18 @@ export default function Game() {
   return (
     <>
       <div className="game">
-        <div className="game-history">
+        {/* <div className="game-history">
           <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
             {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
           </ToggleButton>
           <ol>{moves}</ol>
-        </div>
+        </div> */}
 
+        <div className="game-history">
+          <History />
+        </div>
         <div className="game-board" onClick={handleRestart}>
-          <Board
-            xIsNext={xIsNext}
-            squares={currentSquares}
-            onPlay={handlePlay}
-          />
+          <Board xIsNext={xIsNext} squares={currentBoard} onPlay={handlePlay} />
         </div>
 
         <div className="game-text">{paragraph}</div>
