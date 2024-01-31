@@ -121,15 +121,15 @@ footer {
     height: fit-content;
   }
 
-  .game-info {
+  .game-history {
     display: flex;
     flex-direction: column;
     margin: 1em;
     padding: 1em;
     width: 30%;
-    flex-grow: 1; /* Permet à .game-info de prendre autant d'espace que possible */
-    flex-shrink: 1; /* Permet à .game-info de réduire sa taille si nécessaire */
-    max-width: 30%; /* Définissez une largeur maximale pour éviter qu'elle ne devienne trop grande */
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 30%;
   }
   /* .wrapper {
     display: flex;

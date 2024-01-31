@@ -3,15 +3,6 @@ import ToggleButton from "@mui/material/ToggleButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getParagraph } from "./paragraph";
-function Square({ value, onSquareClick, isWinnerSquare }) {
-  const squareClassName = isWinnerSquare ? "square winner" : "square";
-
-  return (
-    <button className={squareClassName} onClick={onSquareClick}>
-      {value}
-    </button>
-  );
-}
 
 function Board({ xIsNext, squares, onPlay }) {
   function renderSquare(i, isWinnerSquare) {
@@ -71,26 +62,6 @@ function Board({ xIsNext, squares, onPlay }) {
       </div>
     </>
   );
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return { winner: squares[a], winningPosition: [a, b, c] };
-    }
-  }
-  return null;
 }
 
 export default function Game() {
@@ -182,7 +153,7 @@ export default function Game() {
   return (
     <>
       <div className="game">
-        <div className="game-info">
+        <div className="game-history">
           <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
             {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
           </ToggleButton>
@@ -201,4 +172,34 @@ export default function Game() {
       </div>
     </>
   );
+}
+
+function Square({ value, onSquareClick, isWinnerSquare }) {
+  const squareClassName = isWinnerSquare ? "square winner" : "square";
+
+  return (
+    <button className={squareClassName} onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return { winner: squares[a], winningPosition: [a, b, c] };
+    }
+  }
+  return null;
 }
