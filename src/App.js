@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getParagraph } from "./paragraph";
 
-function Board({ xIsNext, squares, onPlay }) {
+function Board({ xIsNext, squares, onPlay, win }) {
   function renderSquare(i, isWinnerSquare) {
     return (
       <Square
@@ -30,20 +30,20 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
-  const win = calculateWinner(squares);
-  const isDraw = squares.every((element) => element !== null);
-  let status;
-  if (!!win) {
-    status = "Winner: " + win.winner;
-  } else if (isDraw) {
-    status = "Draw match";
-  } else if (!win) {
-    status = "Next player: " + (xIsNext ? "X" : "O");
-  }
+  // const win = calculateWinner(squares);
+  // const isDraw = squares.every((element) => element !== null);
+  // let status;
+  // if (!!win) {
+  //   status = "Winner: " + win.winner;
+  // } else if (isDraw) {
+  //   status = "Draw match";
+  // } else if (!win) {
+  //   status = "Next player: " + (xIsNext ? "X" : "O");
+  // }
 
   return (
     <>
-      <div className="status">{status}</div>
+      {/* <div className="status">{status}</div> */}
       <div className="board">
         {Array(3)
           .fill(null)
@@ -157,48 +157,65 @@ export default function Game() {
     paragraph = <p>Well played !</p>;
   }
 
-  // const moves = history.map((squares, move) => {
-  //   let description;
-  //   if (move > 0 && move < currentMove) {
-  //     const lastMoveIndex = findLastMove(history[move - 1], history[move]);
-  //     if (lastMoveIndex !== -1) {
-  //       const row = Math.floor(lastMoveIndex / 3) + 1;
-  //       const col = (lastMoveIndex % 3) + 1;
-  //       description = `Go to move #${move} (${row}, ${col})`;
-  //     } else {
-  //       description = `Go to move #${move}`;
-  //     }
-  //   } else if (move === currentMove) {
-  //     description = "You are at move #" + move;
-  //   } else {
-  //     description = "Go to game start";
-  //   }
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0 && move < currentMove) {
+      const lastMoveIndex = findLastMove(history[move - 1], history[move]);
+      if (lastMoveIndex !== -1) {
+        const row = Math.floor(lastMoveIndex / 3) + 1;
+        const col = (lastMoveIndex % 3) + 1;
+        description = `Go to move #${move} (${row}, ${col})`;
+      } else {
+        description = `Go to move #${move}`;
+      }
+    } else if (move === currentMove) {
+      description = "You are at move #" + move;
+    } else {
+      description = "Go to game start";
+    }
 
-  //   return (
-  //     <li key={move}>
-  //       <button onClick={() => jumpTo(move)}>{description}</button>
-  //     </li>
-  //   );
-  // });
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
 
   if (!isToggle) {
     moves.reverse();
   }
+
+  // const win = calculateWinner(squares);
+  const isDraw = currentBoard.every((element) => element !== null);
+  let status;
+  if (!!win) {
+    status = "Winner: " + win.winner;
+  } else if (isDraw) {
+    status = "Draw match";
+  } else if (!win) {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
   return (
     <>
       <div className="game">
-        {/* <div className="game-history">
+        <div className="game-history">
           <ToggleButton value="order" onChange={() => setIsToggle(!isToggle)}>
             {isToggle ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
           </ToggleButton>
           <ol>{moves}</ol>
-        </div> */}
-
+        </div>
+        {/* 
         <div className="game-history">
           <History />
-        </div>
+        </div> */}
         <div className="game-board" onClick={handleRestart}>
-          <Board xIsNext={xIsNext} squares={currentBoard} onPlay={handlePlay} />
+          <div className="status">{status}</div>
+          <Board
+            xIsNext={xIsNext}
+            squares={currentBoard}
+            onPlay={handlePlay}
+            win={win}
+          />
         </div>
 
         <div className="game-text">{paragraph}</div>
