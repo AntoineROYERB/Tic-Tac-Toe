@@ -3,26 +3,51 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "Manrope", sans-serif;
-  font-size: 1.5vw;
-  overflow: hidden; /* Prevent vertical scrollbar on the whole page */
+  /* font-size: 1.5vw; */
 }
 
 html {
-  background-color: #000;
+  background-color: blue;
+  height: 100%;
 }
 
 body {
-  /* overflow-y: hidden; */
   display: flex;
+  height: 100%;
+
   flex-direction: column;
-  height: 100vh;
 }
 
+header {
+  background-color: #dcded6;
+  display: flex;
+  justify-content: center;
+}
+
+footer {
+  margin: 0;
+  background-color: #5d726f;
+  display: flex;
+  justify-content: space-around;
+}
+
+footer a {
+  display: block;
+  font-size: 1em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+}
+
+.img-link {
+  height: 2em;
+  width: 2em;
+}
 li {
   display: flex;
   justify-content: center;
   align-items: center;
   list-style-type: none;
+  white-space: nowrap;
 }
 
 li:nth-child(odd) {
@@ -39,27 +64,7 @@ li button {
 button {
   background-color: transparent;
   border: none;
-  font-size: 1em;
-}
-
-header {
-  display: flex;
-  background-color: #dcded6;
-  height: 3em;
-  align-items: center;
-  justify-content: center;
-}
-
-header h1 {
-  font-size: 1.5em;
-}
-
-footer {
-  display: flex;
-  height: 3em;
-  background-color: #5d726f;
-  justify-content: space-around;
-  align-items: center;
+  /* font-size: 1em; */
 }
 
 .github-link img,
@@ -70,13 +75,10 @@ footer {
 
 #root {
   background-color: #ced0c3;
+  flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  flex-grow: 1;
-  box-sizing: border-box;
-
+  flex-direction: row;
   .square {
     background: #b4bab1;
     border: 1px solid #859393;
@@ -97,52 +99,42 @@ footer {
   }
 
   .board-row {
-    width: fit-content;
-    height: fit-content;
     display: flex;
-  }
-
-  .board {
     width: fit-content;
     height: fit-content;
-  }
-
-  .game-board {
-    align-items: center;
-    justify-content: center;
   }
 
   .game {
     display: flex;
-    flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
-    justify-content: center;
-    width: fit-content;
-    height: fit-content;
+    flex-grow: 1;
   }
 
   .game-history {
     display: flex;
     flex-direction: column;
     margin: 1em;
-    padding: 1em;
-    width: 30%;
-    flex-grow: 1;
-    flex-shrink: 1;
-    max-width: 30%;
+    width: 15%;
+    top: 50%;
+    left: 30%;
+    position: absolute;
+    transform: translate(-50%, -50%);
   }
-  /* .wrapper {
-    display: flex;
-    align-items: flex-start; 
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  } */
-  .game-text {
-    width: 20em;
+
+  .game-status-board {
     margin: 1em;
-    flex-grow: 1;
-    flex-shrink: 1;
-    max-width: 30%;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  .game-paragraph {
+    margin: 1em;
+    width: 20%;
+    top: 50%;
+    left: 75%;
+    position: absolute;
+    transform: translate(-50%, -50%);
   }
 }

@@ -178,12 +178,16 @@ export default function Game() {
   return (
     <>
       <div className="game">
-        <History
-          onJumpTo={handleJumpTo}
-          gameHistory={history}
-          currentMove={currentMove}
-          squares={currentBoard}
-        />
+        <div className="game-history">
+          <History
+            className
+            onJumpTo={handleJumpTo}
+            gameHistory={history}
+            currentMove={currentMove}
+            squares={currentBoard}
+          />
+        </div>
+
         <div className="game-status-board" onClick={handleRestart}>
           <div className="status">{status}</div>
           <Board
@@ -193,7 +197,9 @@ export default function Game() {
             gameInfo={gameInfo}
           />
         </div>
-        <Paragraph gameHistory={history} gameInfo={gameInfo} />
+        <div className="game-paragraph">
+          <Paragraph gameHistory={history} gameInfo={gameInfo} />
+        </div>
       </div>
     </>
   );
