@@ -129,6 +129,7 @@ button {
     position: absolute;
     transform: translate(-50%, -50%);
   }
+
   .game-paragraph {
     margin: 1em;
     width: 20%;

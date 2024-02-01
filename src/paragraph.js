@@ -23,7 +23,7 @@ export const getParagraph = (history) => {
     case 2:
       const isXInCorner = IsPlayerInCorner(currentBoard, 1, "X");
       const isXinSide = IsXInSide(currentBoard);
-
+      const isXinCenter = !isXinSide && !isXInCorner;
       if (isXInCorner) {
         return (
           <>
@@ -45,6 +45,46 @@ export const getParagraph = (history) => {
       }
 
       if (isXinSide) {
+        return (
+          <>
+            <p>
+              Interesting choice! Placing your first "X" on a side gives you a
+              different strategic advantage.
+            </p>
+            <br />
+            <p>
+              Make sure to observe your opponent's moves closely. You have the
+              opportunity to create various patterns and control the flow of the
+              game.
+            </p>
+            <br />
+            <p>
+              As the game unfolds, adapt your strategy and be prepared to
+              capitalize on any mistakes your opponent may make.
+            </p>
+          </>
+        );
+      }
+
+      if (isXinCenter) {
+        return (
+          <>
+            <p>
+              You've started with a smart move by placing your "X" in the
+              center.
+            </p>
+            <br />
+            <p>
+              The center is a powerful position in Tic Tac Toe, providing you
+              with various strategic opportunities to control the game.
+            </p>
+            <br />
+            <p>
+              As the game progresses, consider expanding your control over the
+              board and stay vigilant for opportunities to secure your victory.
+            </p>
+          </>
+        );
       }
 
     case 3:
@@ -82,6 +122,7 @@ export const getParagraph = (history) => {
       if (isSecondMoveOInCenter && !areXAdjacent) {
         return <p>You can still win !</p>;
       }
+
     case 5:
       const isOplayedCorner = IsPlayerInCorner(currentBoard, 1, "O");
       isOInTheCenter = IsOInTheCenter(currentBoard);
