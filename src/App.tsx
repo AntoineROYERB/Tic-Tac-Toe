@@ -4,8 +4,21 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getParagraph } from "./paragraph";
 
-function Board({ xIsNext, squares, onPlay, gameInfo }) {
-  function renderSquare(squareIndex, isWinnerSquare) {
+type SquareItemType = null | string;
+type HistoryType = SquareItemType[][];
+
+function Board({
+  xIsNext,
+  squares,
+  onPlay,
+  gameInfo,
+}: {
+  xIsNext: boolean;
+  squares: SquareItemType[];
+  onPlay: (squares: any[]) => void;
+  gameInfo: any;
+}) {
+  function renderSquare(squareIndex: number, isWinnerSquare: boolean) {
     return (
       <Square
         key={squareIndex}
@@ -16,7 +29,7 @@ function Board({ xIsNext, squares, onPlay, gameInfo }) {
     );
   }
 
-  function handleClick(squareIndex) {
+  function handleClick(squareIndex: number) {
     console.log("squares", squares);
     if ((gameInfo && gameInfo.winner) || squares[squareIndex]) {
       return;
@@ -58,10 +71,21 @@ function Board({ xIsNext, squares, onPlay, gameInfo }) {
   );
 }
 
-function History({ onJumpTo, gameHistory, currentMove }) {
+function History({
+  onJumpTo,
+  gameHistory,
+  currentMove,
+}: {
+  onJumpTo: (moveIndex: number) => void;
+  gameHistory: HistoryType;
+  currentMove: number;
+}) {
   const [isToggle, setIsToggle] = useState(true);
 
-  function findLastMove(previousList, currentList) {
+  function findLastMove(
+    previousList: SquareItemType[],
+    currentList: SquareItemType[]
+  ) {
     for (let i = 0; i < currentList.length; i++) {
       if (previousList[i] !== currentList[i]) {
         return i;
@@ -71,7 +95,7 @@ function History({ onJumpTo, gameHistory, currentMove }) {
     return currentList.length - 1;
   }
 
-  function handleClick(moveIndex) {
+  function handleClick(moveIndex: number) {
     onJumpTo(moveIndex);
   }
 
@@ -115,7 +139,13 @@ function History({ onJumpTo, gameHistory, currentMove }) {
   );
 }
 
-function Paragraph({ gameHistory, gameInfo }) {
+function Paragraph({
+  gameHistory,
+  gameInfo,
+}: {
+  gameHistory: HistoryType;
+  gameInfo: any;
+}) {
   let paragraph;
   let finalMessageSent;
   if (!finalMessageSent) {
@@ -146,13 +176,13 @@ export default function Game() {
   const xIsNext = currentMove % 2 === 0;
   const currentBoard = history[currentMove];
 
-  function handlePlay(nextSquares) {
+  function handlePlay(nextSquares: SquareItemType[]) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
 
-  function handleJumpTo(nextMove) {
+  function handleJumpTo(nextMove: number) {
     setCurrentMove(nextMove);
   }
 
@@ -180,11 +210,10 @@ export default function Game() {
       <div className="game">
         <div className="game-history">
           <History
-            className
             onJumpTo={handleJumpTo}
             gameHistory={history}
             currentMove={currentMove}
-            squares={currentBoard}
+            // squares={currentBoard}
           />
         </div>
 
@@ -205,7 +234,15 @@ export default function Game() {
   );
 }
 
-function Square({ value, onSquareClick, isWinnerSquare }) {
+function Square({
+  value,
+  onSquareClick,
+  isWinnerSquare,
+}: {
+  value: SquareItemType;
+  onSquareClick: () => void;
+  isWinnerSquare: boolean;
+}) {
   const squareClassName = isWinnerSquare ? "square winner" : "square";
 
   return (
@@ -215,7 +252,7 @@ function Square({ value, onSquareClick, isWinnerSquare }) {
   );
 }
 
-function getGameInfo(squares) {
+function getGameInfo(squares: SquareItemType[]) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],

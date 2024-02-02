@@ -9,14 +9,18 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "latest_version",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.6",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.16",
+    "@types/react": "^18.2.51",
+    "@types/react-dom": "^18.2.18",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.1",
-    "@babel/plugin-proposal-private-property-in-object": "^1.0.0"
+    "react-scripts": "^5.0.1"
   },
   "browserslist": {
     "production": [
@@ -29,5 +33,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
   }
 }

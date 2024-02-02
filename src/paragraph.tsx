@@ -1,4 +1,7 @@
-export const getParagraph = (history) => {
+type SquareItemType = null | string;
+type HistoryType = SquareItemType[][];
+
+export const getParagraph = (history: HistoryType) => {
   const currentBoard = history[history.length - 1];
   const moveNumber = history.length;
   let isOInTheCenter, areXAdjacent;
@@ -151,7 +154,11 @@ export const getParagraph = (history) => {
   }
 };
 
-function IsPlayerInCorner(Board, requiredCount, player) {
+function IsPlayerInCorner(
+  Board: SquareItemType[],
+  requiredCount: number,
+  player: string
+) {
   const xCountInCorner = [Board[0], Board[2], Board[6], Board[8]].filter(
     (element) => element === player
   ).length;
@@ -159,19 +166,19 @@ function IsPlayerInCorner(Board, requiredCount, player) {
   return xCountInCorner === requiredCount;
 }
 
-function IsXInSide(Board) {
+function IsXInSide(Board: SquareItemType[]) {
   return [Board[1], Board[3], Board[5], Board[7]].some(
     (element) => element === "X"
   );
 }
 
-function IsOInTheCenter(Board) {
+function IsOInTheCenter(Board: SquareItemType[]) {
   return Board[4] === "O";
 }
 
-function AreXAdjacent(Board) {
+function AreXAdjacent(Board: SquareItemType[]) {
   // Trouver les indices des "X" dans la grille
-  const xIndices = [];
+  const xIndices: number[] = [];
   Board.forEach((element, index) => {
     if (element === "X") {
       xIndices.push(index);
@@ -202,9 +209,9 @@ function AreXAdjacent(Board) {
   );
 }
 
-function AreTwoXInCornersWithOInBetween(Board) {
+function AreTwoXInCornersWithOInBetween(Board: SquareItemType[]) {
   // Trouver les indices des "X" et "O" dans la grille
-  const xIndices = [];
+  const xIndices: number[] = [];
   let oIndex = null;
 
   Board.forEach((element, index) => {
@@ -225,7 +232,7 @@ function AreTwoXInCornersWithOInBetween(Board) {
   );
 }
 
-function IsOnlyOneCornerNull(Board) {
+function IsOnlyOneCornerNull(Board: SquareItemType[]) {
   const cornerIndices = [0, 2, 6, 8];
   const nullCount = cornerIndices.filter(
     (index) => Board[index] === null
