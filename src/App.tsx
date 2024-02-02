@@ -30,7 +30,6 @@ function Board({
   }
 
   function handleClick(squareIndex: number) {
-    console.log("squares", squares);
     if ((gameInfo && gameInfo.winner) || squares[squareIndex]) {
       return;
     }
@@ -44,7 +43,6 @@ function Board({
     }
     onPlay(nextSquares);
   }
-  console.log("gameInfo:", gameInfo);
   return (
     <>
       <div className="board">

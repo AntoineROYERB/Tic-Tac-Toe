@@ -1,9 +1,17 @@
 # Tic-Tac-Toe
 
-This project serves as a practical learning journey to solidify React fundamentals through the creation of a classic Tic Tac Toe game. While initially inspired by the step-by-step [tutorial](https://react.dev/learn/tutorial-tic-tac-toe)
-provided on the official React website.
+Welcome to the Tic Tac Toe game! This project is a React/TypeScript application that allows you to play the classic game of Tic Tac Toe. The game is designed to be user-friendly and intuitive, providing an enjoyable experience for players of all ages.
 
-The project has evolved beyond the tutorial's scope.
+Our game comes packed with user-friendly features designed to enhance your gameplay.
+
+- The left panel provides the convenience of revisiting previous moves, allowing you to reflect on the game's progression.
+
+- On the right, find helpful guidance tailored for player X, suggesting optimal moves to elevate your strategic approach.
+
+![screenshot of the game](public/img/Tic-Tac-Toe.png)
+
+Initially inspired by the step-by-step [tutorial](https://react.dev/learn/tutorial-tic-tac-toe)
+provided on the official React website.
 
 ## Installation
 
